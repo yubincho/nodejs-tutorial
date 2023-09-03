@@ -16,6 +16,7 @@ AppDataSource.initialize()
 
         app.use(express.json())
         app.use(cors({
+            credentials: true,  // 프론트엔드에서 쿠키(jwt)를 확인할 수 있게 함
             origin: ["http://localhost:3000"]
         }))
 

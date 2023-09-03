@@ -4,6 +4,7 @@ import AppDataSource from "../database/ormConfig";
 import {User} from "../entities/user.entity";
 // import bcrypt from "bcryptjs";
 import * as bcrypt from 'bcryptjs';
+import { sign } from 'jsonwebtoken'
 
 
 export const Register = async(req: Request, res: Response) => {
@@ -51,7 +52,26 @@ export const Login = async (req: Request, res: Response) => {
         })
     }
 
-    const { password, ...data } = user
+    // const payload = {
+    //     id: user.id
+    // }
+    // const token = sign(payload, "secret")
+    // 위 코드 짧게 만들기
+    const token = sign({
+        id: user.id
+    }, "secret")
 
-    res.send(data)
+    res.cookie('jwt', token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 1day
+    })
+
+    // const { password, ...data } = user
+
+    res.send({
+        message: 'success'
+    })
+
+    // res.send(token)
+    // res.send(data)
 }
