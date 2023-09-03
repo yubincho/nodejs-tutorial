@@ -18,9 +18,12 @@ export const AuthMiddleware = async (req: Request, res: Response, next: Function
 
         const repository = AppDataSource.getRepository(User)
 
-        const { password, ...user} = await repository.findOneBy(payload.id)
+        // const { password, ...user} = await repository.findOneBy(payload.id)
+        req["user"] = await repository.findOneBy(payload.id)
 
-        // res.se
+        // req.user = user // typescript : 실행안됨
+        // req["user"] = user
+
         next()
     } catch (e) {
         return res.status(401).send({
