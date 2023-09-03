@@ -6,6 +6,7 @@ import cors from 'cors'
 import {routes} from "./routes";
 import {createConnection} from "typeorm";
 import AppDataSource from "./database/ormConfig";
+import cookieParser from "cookie-parser";
 // import { config } from "dotenv";
 // config();
 
@@ -15,6 +16,7 @@ AppDataSource.initialize()
         const app = express()
 
         app.use(express.json())
+        app.use(cookieParser())
         app.use(cors({
             credentials: true,  // 프론트엔드에서 쿠키(jwt)를 확인할 수 있게 함
             origin: ["http://localhost:3000"]
