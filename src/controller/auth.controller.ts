@@ -1,9 +1,12 @@
 import {Request, Response} from "express";
 import {RegisterValidation} from "../validation/register.validation";
 import AppDataSource from "../database/ormConfig";
+import {User} from "../entities/user.entity";
+// import bcrypt from "bcryptjs";
+import * as bcrypt from 'bcryptjs';
 
 
-export const Register = (req: Request, res: Response) => {
+export const Register = async(req: Request, res: Response) => {
     const body = req.body
 
     const { error } = RegisterValidation.validate(body)
@@ -18,5 +21,14 @@ export const Register = (req: Request, res: Response) => {
         })
     }
 
-    res.send(body)
+    const repository = AppDataSource.getRepository(User)
+    const {password, ...user} = await repository.save({
+        first_name: body.first_name,
+        last_name: body.last_name,
+        email: body.email,
+        password: await bcrypt.hash(body.password, 10)
+    })
+
+    res.send(user)
+    // res.send(body)
 }

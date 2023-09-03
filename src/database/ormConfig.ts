@@ -3,16 +3,16 @@ import { DataSource } from "typeorm";
 
 const AppDataSource = new DataSource({
     type: "mysql",
-    host: "******",
+    host: "localhost",
     port: 3306,
-    username: "****",
-    password: "****",
-    database: "******",
+    username: "root",
+    password: "1234",
+    database: "node_admin",
     extra: {
         trustServerCertificate: true,
     },
     entities: [
-        "src/entity/*.ts"
+        "src/entities/*.ts"
     ],
     logging: false,
     synchronize: true
