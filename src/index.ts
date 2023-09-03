@@ -1,14 +1,13 @@
-import "dotenv/config"
-import dotenv from "dotenv";
-dotenv.config({ path: '/.env'});
+
+import { config } from "dotenv";
+config();
+
 import express, {Request, Response} from 'express';
 import cors from 'cors'
 import {routes} from "./routes";
-import {createConnection} from "typeorm";
 import AppDataSource from "./database/ormConfig";
 import cookieParser from "cookie-parser";
-// import { config } from "dotenv";
-// config();
+
 
 // database
 AppDataSource.initialize()

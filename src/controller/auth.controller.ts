@@ -57,9 +57,8 @@ export const Login = async (req: Request, res: Response) => {
     // }
     // const token = sign(payload, "secret")
     // 위 코드 짧게 만들기
-    const token = sign({
-        id: user.id
-    }, "secret")
+    // const token = sign({id: user.id}, "secret")
+    const token = sign({id: user.id}, process.env.SECRET_KEY)
 
     res.cookie('jwt', token, {
         httpOnly: true,
@@ -80,7 +79,8 @@ export const AuthenticatedUser = async (req: Request, res: Response) => {
     try{
         const jwt = req.cookies['jwt']
 
-        const payload: any = verify(jwt, "secret")
+        // const payload: any = verify(jwt, "secret")
+        const payload: any = verify(jwt, process.env.SECRET_KEY)
 
         if (!payload) {
             return res.status(401).send({
