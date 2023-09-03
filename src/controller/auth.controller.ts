@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
 import {RegisterValidation} from "../validation/register.validation";
+import AppDataSource from "../database/ormConfig";
 
 
 export const Register = (req: Request, res: Response) => {
