@@ -77,22 +77,37 @@ export const Login = async (req: Request, res: Response) => {
 }
 
 export const AuthenticatedUser = async (req: Request, res: Response) => {
-    const jwt = req.cookies['jwt']
+    try{
+        const jwt = req.cookies['jwt']
 
-    const payload: any = verify(jwt, "secret")
+        const payload: any = verify(jwt, "secret")
 
-    if (!payload) {
+        if (!payload) {
+            return res.status(401).send({
+                message: 'unauthenticated'
+            })
+        }
+
+        const repository = AppDataSource.getRepository(User)
+
+        // const user = await repository.findOneBy(payload.id)
+
+        const { password, ...user} = await repository.findOneBy(payload.id)
+
+        res.send(user)
+        // res.send(jwt)
+    } catch (e) {
         return res.status(401).send({
-            message: 'unauthenticate'
+            message: 'unauthenticated'
         })
     }
+    
+}
 
-    const repository = AppDataSource.getRepository(User)
+export const Logout = async (req: Request, res: Response) => {
+    res.cookie('jwt', '', {maxAge: 0})
 
-    // const user = await repository.findOneBy(payload.id)
-
-    const { password, ...user} = await repository.findOneBy(payload.id)
-
-    res.send(user)
-    // res.send(jwt)
+    res.send({
+        message: 'success'
+    })
 }
