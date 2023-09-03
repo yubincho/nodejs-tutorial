@@ -32,3 +32,26 @@ export const Register = async(req: Request, res: Response) => {
     res.send(user)
     // res.send(body)
 }
+
+
+export const Login = async (req: Request, res: Response) => {
+    const repository = AppDataSource.getRepository(User)
+
+    const user = await repository.findOneBy({ email: req.body.email })
+
+    if (!user) {
+        return res.status(404).send({
+            message: 'User not found!'
+        })
+    }
+
+    if (!await bcrypt.compare(req.body.password, user.password)) {
+        return res.status(400).send({
+            message: 'Invalid credentials!'
+        })
+    }
+
+    const { password, ...data } = user
+
+    res.send(data)
+}
